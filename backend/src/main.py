@@ -20,6 +20,7 @@ app.config['SECRET_KEY'] = 'asdf#FGSgvasgf$5$WGT'
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'uploads')
 ALLOWED_EXTENSIONS = {'pdf'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['ALLOWED_EXTENSIONS'] = ALLOWED_EXTENSIONS
 
 # Criar a pasta de uploads se não existir
 if not os.path.exists(UPLOAD_FOLDER):
