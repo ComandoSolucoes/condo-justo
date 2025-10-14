@@ -99,7 +99,7 @@ def update_proposta(proposta_id):
 @proposta_bp.route("/propostas/<int:proposta_id>/history", methods=["GET"])
 def get_proposta_history(proposta_id):
     history = ProposalHistory.query.filter_by(proposal_id=proposta_id).order_by(ProposalHistory.change_timestamp.desc()).all()
-    return jsonify([entry.to_dict() for entry in history])
+    return jsonify([h.to_dict() for h in history]), 200
 
 @proposta_bp.route("/propostas/<int:proposta_id>", methods=["DELETE"])
 def delete_proposta(proposta_id):

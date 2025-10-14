@@ -32,9 +32,15 @@ def login():
     if not data or not data.get("email") or not data.get("password"):
         return jsonify({"error": "Missing data"}), 400
 
+    print(f"Attempting login for email: {data['email']}")
     user = User.query.filter_by(email=data["email"]).first()
+    if user:
+        print(f"User found: {user.username}, type: {user.user_type}")
+    else:
+        print("User not found")
 
     if not user or not user.check_password(data["password"]):
+        print(f"Password check failed for user {user.username if user else 'N/A'}")
         return jsonify({"error": "Invalid credentials"}), 401
 
     # Em um aplicativo real, aqui você geraria um token JWT e o retornaria

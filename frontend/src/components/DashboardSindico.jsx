@@ -266,7 +266,7 @@ function DashboardSindico({ user, onLogout }) {
                           {proposta.pdf_url && (
                             <div className="col-span-2">
                               <a 
-                                href={proposta.pdf_url} 
+                                href={`http://localhost:5000${proposta.pdf_url}`} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 className="text-blue-600 hover:underline"
