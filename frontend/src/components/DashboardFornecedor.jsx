@@ -13,6 +13,7 @@ function DashboardFornecedor({ user, onLogout }) {
   const [showPropostaDetail, setShowPropostaDetail] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [pdfFile, setPdfFile] = useState(null);
+  const [propostaHistory, setPropostaHistory] = useState({});
   const [formData, setFormData] = useState({
     valor: '',
     prazo_entrega: '',
@@ -52,6 +53,21 @@ function DashboardFornecedor({ user, onLogout }) {
       }
     } catch (err) {
       console.error('Erro ao buscar propostas:', err);
+    }
+  };
+
+  const fetchPropostaHistory = async (propostaId) => {
+    try {
+      const response = await fetch(`/api/propostas/${propostaId}/history`);
+      if (response.ok) {
+        const historyData = await response.json();
+        setPropostaHistory(prev => ({ ...prev, [propostaId]: historyData }));
+      } else {
+        console.error(`Erro ao buscar histórico da proposta ${propostaId}:`, await response.text());
+      }
+    } catch (err) {
+      console.error(`Erro ao buscar histórico da proposta ${propostaId}:`, err);
+    }
     }
   };
 
@@ -311,7 +327,7 @@ function DashboardFornecedor({ user, onLogout }) {
                     <div>
                       <p className="text-sm text-gray-500">PDF Anexado</p>
                       <a 
-                        href={`http://localhost:5179${selectedProposta.pdf_url}`} 
+                        href={`${selectedProposta.pdf_url}`} 
                         target="_blank" 
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:underline"
