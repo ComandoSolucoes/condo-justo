@@ -68,7 +68,6 @@ function DashboardFornecedor({ user, onLogout }) {
     } catch (err) {
       console.error(`Erro ao buscar histórico da proposta ${propostaId}:`, err);
     }
-    }
   };
 
   const handleInputChange = (e) => {
