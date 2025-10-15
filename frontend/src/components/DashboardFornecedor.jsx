@@ -95,8 +95,11 @@ function DashboardFornecedor({ user, onLogout }) {
         formDataToSend.append('pdf_file', pdfFile);
       }
 
-      const response = await fetch('/api/propostas', {
-        method: 'POST',
+      const response = await fetch("/api/propostas", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
         body: formDataToSend,
       });
 
