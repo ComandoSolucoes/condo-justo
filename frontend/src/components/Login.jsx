@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button.jsx';
 import { Input } from '@/components/ui/input.jsx';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card.jsx';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card.jsx';
+import CondoJustoLogo from '../assets/condojusto.png';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -38,7 +39,7 @@ function Login({ onLogin }) {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">Condo Justo</CardTitle>
+          <img src={CondoJustoLogo} alt="Condo Justo Logo" className="mx-auto h-24 w-auto" />
           <CardDescription className="text-center">Entre com suas credenciais</CardDescription>
         </CardHeader>
         <CardContent>
