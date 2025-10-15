@@ -23,7 +23,12 @@ function DashboardSindico({ user, onLogout }) {
 
   const fetchDemandas = async () => {
     try {
-      const response = await fetch('/api/demandas');
+      const token = localStorage.getItem("authToken");
+      const response = await fetch("/api/demandas", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setDemandas(data);
@@ -35,7 +40,12 @@ function DashboardSindico({ user, onLogout }) {
 
   const fetchPropostas = async (demandaId) => {
     try {
-      const response = await fetch('/api/propostas');
+      const token = localStorage.getItem("authToken");
+      const response = await fetch("/api/propostas", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setPropostas(data.filter(p => p.demanda_id === demandaId));
@@ -60,10 +70,12 @@ function DashboardSindico({ user, onLogout }) {
     e.preventDefault();
     
     try {
-      const response = await fetch('/api/demandas', {
-        method: 'POST',
+      const token = localStorage.getItem("authToken");
+      const response = await fetch("/api/demandas", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           ...formData,

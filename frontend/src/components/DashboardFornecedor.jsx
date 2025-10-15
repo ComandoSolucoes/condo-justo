@@ -28,7 +28,12 @@ function DashboardFornecedor({ user, onLogout }) {
 
   const fetchDemandas = async () => {
     try {
-      const response = await fetch('/api/demandas');
+      const token = localStorage.getItem("authToken");
+      const response = await fetch("/api/demandas", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const data = await response.json();
         setDemandas(data.filter(d => d.status === 'Cotação'));
@@ -58,7 +63,12 @@ function DashboardFornecedor({ user, onLogout }) {
 
   const fetchPropostaHistory = async (propostaId) => {
     try {
-      const response = await fetch(`/api/propostas/${propostaId}/history`);
+      const token = localStorage.getItem("authToken");
+      const response = await fetch(`/api/propostas/${propostaId}/history`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.ok) {
         const historyData = await response.json();
         setPropostaHistory(prev => ({ ...prev, [propostaId]: historyData }));
@@ -94,10 +104,12 @@ function DashboardFornecedor({ user, onLogout }) {
       if (pdfFile) {
         formDataToSend.append('pdf_file', pdfFile);
       }
-
+      const token = localStorage.getItem("authToken");
       const response = await fetch("/api/propostas", {
         method: "POST",
-
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formDataToSend,
       });
 
@@ -127,10 +139,12 @@ function DashboardFornecedor({ user, onLogout }) {
     e.preventDefault();
     
     try {
+      const token = localStorage.getItem("authToken");
       const response = await fetch(`/api/propostas/${selectedProposta.id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           ...formData,

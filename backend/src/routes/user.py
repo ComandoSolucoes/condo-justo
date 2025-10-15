@@ -1,7 +1,32 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, g
+import secrets
+from functools import wraps
 from src.models.user import User, db
+from datetime import datetime, timedelta
 
 user_bp = Blueprint("user", __name__)
+
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].split(' ')[1]
+
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
+        user = User.query.filter_by(token=token).first()
+
+        if not user or user.token_expiration < datetime.utcnow():
+            return jsonify({'message': 'Token is invalid or expired!'}), 401
+
+        g.current_user = user
+        return f(*args, **kwargs)
+
+    return decorated
+
+
 
 @user_bp.route("/register", methods=["POST"])
 def register():
@@ -43,6 +68,9 @@ def login():
         print(f"Password check failed for user {user.username if user else 'N/A'}")
         return jsonify({"error": "Invalid credentials"}), 401
 
-    # Em um aplicativo real, aqui você geraria um token JWT e o retornaria
-    return jsonify({"message": "Login successful", "user": user.to_dict()})
+    user.token = secrets.token_hex(16)
+    user.token_expiration = datetime.utcnow() + timedelta(hours=1) # Token válido por 1 hora
+    db.session.commit()
+
+    return jsonify({"message": "Login successful", "user": user.to_dict(), "token": user.token})
 

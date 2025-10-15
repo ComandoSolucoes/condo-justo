@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Login from './components/Login.jsx';
 import DashboardSindico from './components/DashboardSindico.jsx';
 import DashboardMorador from './components/DashboardMorador.jsx';
@@ -8,11 +8,23 @@ import './App.css';
 function App() {
   const [user, setUser] = useState(null);
 
-  const handleLogin = (userData) => {
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    const authToken = localStorage.getItem('authToken');
+    if (storedUser && authToken) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  const handleLogin = (userData, token) => {
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('authToken', token);
     setUser(userData);
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
     setUser(null);
   };
 
