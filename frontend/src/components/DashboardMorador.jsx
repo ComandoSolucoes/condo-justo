@@ -14,12 +14,7 @@ function DashboardMorador({ user, onLogout }) {
 
   const fetchDemandas = async () => {
     try {
-      const token = localStorage.getItem("authToken");
-      const response = await fetch("/api/demandas", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch("/api/demandas");
       if (response.ok) {
         const data = await response.json();
         setDemandas(data);
@@ -31,12 +26,7 @@ function DashboardMorador({ user, onLogout }) {
 
   const fetchPropostas = async (demandaId) => {
     try {
-      const token = localStorage.getItem("authToken");
-      const response = await fetch("/api/propostas", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch("/api/propostas");
       if (response.ok) {
         const data = await response.json();
         setPropostas(data.filter(p => p.demanda_id === demandaId));

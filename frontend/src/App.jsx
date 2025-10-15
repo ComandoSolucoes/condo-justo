@@ -8,23 +8,15 @@ import './App.css';
 function App() {
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const authToken = localStorage.getItem('authToken');
-    if (storedUser && authToken) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
-  const handleLogin = (userData, token) => {
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('authToken', token);
+
+  const handleLogin = (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('authToken');
+    localStorage.removeItem("user");
     setUser(null);
   };
 

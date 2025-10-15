@@ -28,12 +28,7 @@ function Login({ onLogin }) {
       }
 
       const data = await response.json();
-      if (data.token) {
-        localStorage.setItem('authToken', data.token);
-        onLogin(data.user, data.token);
-      } else {
-        setError('Token de autenticação não recebido.');
-      }
+      onLogin(data.user);
     } catch (err) {
       setError('Erro ao conectar com o servidor');
     }

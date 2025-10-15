@@ -1,5 +1,5 @@
 from src.models import db
-from datetime import datetime, timedelta
+
 from werkzeug.security import generate_password_hash, check_password_hash
 
 class User(db.Model):
@@ -7,8 +7,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    token = db.Column(db.String(32), unique=True, nullable=True)
-    token_expiration = db.Column(db.DateTime, nullable=True)
+
     password_hash = db.Column(db.String(128), nullable=False)
     user_type = db.Column(db.String(50), nullable=False) # 'Síndico', 'Morador', 'Fornecedor'
 
@@ -28,7 +27,7 @@ class User(db.Model):
             'id': self.id,
             'username': self.username,
             'email': self.email,
-            'user_type': self.user_type,
-        'token': self.token if self.token_expiration and self.token_expiration > datetime.utcnow() else None
+            'user_type': self.user_type
+
         }
 

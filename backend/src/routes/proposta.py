@@ -1,5 +1,4 @@
-from flask import Blueprint, jsonify, request, current_app, g
-from src.routes.user import token_required
+from flask import Blueprint, jsonify, request, current_app
 from src.models.proposta import Proposta
 from src.models.proposal_history import ProposalHistory
 from src.models import db
@@ -13,7 +12,7 @@ def allowed_file(filename):
            filename.rsplit(".", 1)[1].lower() in current_app.config["ALLOWED_EXTENSIONS"]
 
 @proposta_bp.route("/propostas", methods=["POST"])
-@token_required
+
 def create_proposta():
     data = request.form.to_dict() # Use request.form for multipart/form-data
 
@@ -59,25 +58,25 @@ def create_proposta():
     return jsonify(proposta.to_dict()), 201
 
 @proposta_bp.route("/propostas", methods=["GET"])
-@token_required
+
 def get_propostas():
     propostas = Proposta.query.all()
     return jsonify([proposta.to_dict() for proposta in propostas])
 
 @proposta_bp.route("/propostas/<int:proposta_id>", methods=["GET"])
-@token_required
+
 def get_proposta(proposta_id):
     proposta = Proposta.query.get_or_404(proposta_id)
     return jsonify(proposta.to_dict())
 
 @proposta_bp.route("/propostas/<int:proposta_id>", methods=["PUT"])
-@token_required
+
 def update_proposta(proposta_id):
     proposta = Proposta.query.get_or_404(proposta_id)
     data = request.json
 
     # Get the user making the change (assuming user ID is passed in the request body for now)
-    changed_by_user_id = g.current_user.id # Usar o ID do usuário autenticado
+    changed_by_user_id = data.get("changed_by_user_id")
     if not changed_by_user_id:
         return jsonify({"error": "ID do usuário que realizou a alteração é obrigatório"}), 400
 
@@ -111,13 +110,13 @@ def update_proposta(proposta_id):
     return jsonify(proposta.to_dict())
 
 @proposta_bp.route("/propostas/<int:proposta_id>/history", methods=["GET"])
-@token_required
+
 def get_proposta_history(proposta_id):
     history = ProposalHistory.query.filter_by(proposal_id=proposta_id).order_by(ProposalHistory.change_timestamp.desc()).all()
     return jsonify([h.to_dict() for h in history]), 200
 
 @proposta_bp.route("/propostas/<int:proposta_id>", methods=["DELETE"])
-@token_required
+
 def delete_proposta(proposta_id):
     proposta = Proposta.query.get_or_404(proposta_id)
     db.session.delete(proposta)
