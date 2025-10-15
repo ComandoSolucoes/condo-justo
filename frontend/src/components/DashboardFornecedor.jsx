@@ -202,7 +202,18 @@ function DashboardFornecedor({ user, onLogout }) {
               <CardDescription>Demandas disponíveis para cotação</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-4xl font-bold">{demandas.length}</p>
+              {demandas.length > 0 ? (
+                <ul className="space-y-2">
+                  {demandas.map((demanda) => (
+                    <li key={demanda.id} className="flex justify-between items-center p-2 border rounded-md">
+                      <span>{demanda.titulo}</span>
+                      <Button onClick={() => handleNovaProposta(demanda)}>Adicionar Proposta</Button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Nenhuma demanda aberta no momento.</p>
+              )}
             </CardContent>
           </Card>
 
@@ -212,7 +223,18 @@ function DashboardFornecedor({ user, onLogout }) {
               <CardDescription>Propostas enviadas</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-4xl font-bold">{propostas.length}</p>
+              {propostas.length > 0 ? (
+                <ul className="space-y-2">
+                  {propostas.map((proposta) => (
+                    <li key={proposta.id} className="flex justify-between items-center p-2 border rounded-md">
+                      <span>Proposta para Demanda #{proposta.demanda_id}</span>
+                      <Button onClick={() => handleViewProposta(proposta)}>Ver Detalhes</Button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>Nenhuma proposta enviada ainda.</p>
+              )}
             </CardContent>
           </Card>
         </div>
