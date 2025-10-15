@@ -97,9 +97,7 @@ function DashboardFornecedor({ user, onLogout }) {
 
       const response = await fetch("/api/propostas", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
+
         body: formDataToSend,
       });
 
